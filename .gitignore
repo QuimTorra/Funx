@@ -1,0 +1,6 @@
+__pycache__
+*.interp
+*.tokens
+FunxLexer.py
+FunxParser.py
+FunxVisitor.py
