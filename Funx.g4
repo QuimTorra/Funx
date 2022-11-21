@@ -1,9 +1,12 @@
 grammar Funx;
 
-root: expr EOF;
+root: expr EOF | stmt EOF | EOF;
+
+stmt: IDENT '<-' expr # Assig;
 
 expr:
-	<assoc = right> expr '^' expr						# Bin
+	'(' expr ')'										# Bin
+	| <assoc = right> expr '^' expr						# Bin
 	| expr ('*' | '/' | '%') expr						# Bin
 	| expr ('+' | '-') expr								# Bin
 	| expr ('=' | '!=' | '<' | '>' | '<=' | '>=') expr	# Rel
@@ -14,6 +17,6 @@ expr:
 
 TRUE: 'True';
 FALSE: 'False';
-IDENT: [A-z]+;
+IDENT: [A-Z|a-z]+;
 INT: [0-9]+;
 WS: [ \n]+ -> skip;

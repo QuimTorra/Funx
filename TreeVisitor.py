@@ -8,9 +8,22 @@ else:
 class TreeVisitor(FunxVisitor):
     def __init__(self):
         self.nivell = 0
+    
+    # STATEMENTS
+
+    def visitAssig(self, ctx):
+        l = list(ctx.getChildren())
+        print(" " * self.nivell + "ASSIG(" + l[0].getText() + ")")
+        self.nivell += 1
+        self.visit(l[2])
+
+    # EXPRESSIONS
 
     def visitBin(self, ctx):
         l = list(ctx.getChildren())
+        if l[0].getText() == '(':
+            self.visit(l[1])
+            return
         print(" " * self.nivell + "BIN(" + l[1].getText() + ")")
         self.nivell += 1
         self.visit(l[0])

@@ -1,6 +1,10 @@
 # FUNX
 
-> FIB LP 2022-202
+> Joaquim Torra Garcia
+> 
+> FIB LP 2022-2023
+>
+> https://github.com/gebakx/lp-funcions
 
 # Build
 
@@ -13,7 +17,28 @@ antlr4 -Dlanguage=Python3 -no-listener -visitor Funx.g4
 # TODO
 
 - [x] Basic Operations (`+`, `-`, `*`, `/`, `%`)
-- [ ] Booleans (`True`, `False`, `=`, `!=`, `>`, `<`, `>=`, `<=`)
-    - [x] Types and Operations
-    - [x] FIX ERROR: `True = True` -> `False`
-    - [ ] FIX ERROR: `1=1 = True` -> `False` && `1=1 = 1=1` correct tree
+    - [x] Parenthesys 
+- [ ] Variables
+    - [x] Init to 0
+    - [x] Assignment
+    - [ ] Global/Local Scope
+- [ ] Statements
+  - [ ] If / Else
+  - [ ] While
+- [ ] Functions
+    - [ ] Declaration
+    - [ ] Invocation
+- [ ] CL Interpreter
+    - [x] Flags
+        - [x] --view-tree: Allows you to view the AST
+        - [x] --help: To see all the flags that can be used
+    - [ ] Functions
+        - [ ] :quit
+        - [ ] :clear
+- [ ] Extensions
+    - [x] Booleans (`True`, `False`, `=`, `!=`, `>`, `<`, `>=`, `<=`)
+        - [x] Types and Operations
+        - [x] FIX ERROR: `True = True` -> `False`
+        - [x] FIX ERROR: `1=1 = True` -> `False` && `1=1 = 1=1` correct tree
+    - [ ] For Loop
+    - [ ] Switch
