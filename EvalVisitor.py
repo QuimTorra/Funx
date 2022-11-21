@@ -11,6 +11,7 @@ ops = {
   '*': lambda x, y: x*y,
   '/': lambda x, y: x/y,
   '%': lambda x, y: x%y,
+  '^': lambda x, y: x**y,
   '=': lambda x, y: x==y,
   '!=': lambda x, y: x!=y,
   '<': lambda x, y: x<y,
@@ -35,7 +36,7 @@ class EvalVisitor(FunxVisitor):
     def visitRel(self, ctx):
         l = list(ctx.getChildren())
         if len(l) == 1:
-          return l[0]
+          return l[0].getText()
         op = ops[l[1].getText()]
         return op(self.visit(l[0]), self.visit(l[2]))
 

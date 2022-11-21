@@ -1,4 +1,5 @@
 __pycache__
+.antlr
 *.interp
 *.tokens
 FunxLexer.py

@@ -9,48 +9,31 @@ class TreeVisitor(FunxVisitor):
     def __init__(self):
         self.nivell = 0
 
-    def visitMul(self, ctx):
+    def visitBin(self, ctx):
         l = list(ctx.getChildren())
-        print('  ' *  self.nivell + 'MUL(*)')
+        print(" " * self.nivell + "BIN(" + l[1].getText() + ")")
         self.nivell += 1
         self.visit(l[0])
         self.visit(l[2])
         self.nivell -= 1
 
-    def visitDiv(self, ctx):
+    def visitRel(self, ctx):
         l = list(ctx.getChildren())
-        print('  ' *  self.nivell + 'DIV(/)')
-        self.nivell += 1
-        self.visit(l[0])
-        self.visit(l[2])
-        self.nivell -= 1
-
-    def visitMod(self, ctx):
+        if len(l) == 1:
+            print(" " * self.nivell + "REL(" + l[0].getText() + ")")
+        else:
+            print(" " * self.nivell + "REL(" + l[1].getText() + ")")
+            self.nivell += 1
+            self.visit(l[0])
+            self.visit(l[2])
+            self.nivell -= 1
+    
+    def visitIdent(self, ctx):
         l = list(ctx.getChildren())
-        print('  ' *  self.nivell + 'MOD(%)')
-        self.nivell += 1
-        self.visit(l[0])
-        self.visit(l[2])
-        self.nivell -= 1
-
-    def visitSum(self, ctx):
-        l = list(ctx.getChildren())
-        print('  ' *  self.nivell + 'SUM(+)')
-        self.nivell += 1
-        self.visit(l[0])
-        self.visit(l[2])
-        self.nivell -= 1
-
-    def visitSub(self, ctx):
-        l = list(ctx.getChildren())
-        print('  ' *  self.nivell + 'SUB(-)')
-        self.nivell += 1
-        self.visit(l[0])
-        self.visit(l[2])
-        self.nivell -= 1
+        print(" " * self.nivell + "IDENT(" + l[0].getText() + ")")
 
     def visitVal(self, ctx):
         l = list(ctx.getChildren())
-        print("  " * self.nivell +
+        print(" " * self.nivell +
               FunxParser.symbolicNames[l[0].getSymbol().type] +
               '(' +l[0].getText() + ')')
