@@ -1,8 +1,14 @@
 grammar Funx;
 
-root: expr EOF | stmt EOF | EOF;
+root: stmt EOF | EOF;
 
-stmt: IDENT '<-' expr # Assig;
+stmt:
+	IDENT '<-' expr								# Assig
+	| IF expr '{' stmt '}'						# If
+	| IF expr '{' stmt '}' ELSE '{' stmt '}'	# IfElse
+	| WHILE expr '{' stmt '}'					# While
+	| stmt stmt									# RecStmt
+	| expr										# Exprs;
 
 expr:
 	'(' expr ')'										# Bin
@@ -17,6 +23,9 @@ expr:
 
 TRUE: 'True';
 FALSE: 'False';
+IF: 'if';
+ELSE: 'else';
+WHILE: 'while';
 IDENT: [A-Z|a-z]+;
 INT: [0-9]+;
-WS: [ \n]+ -> skip;
+WS: [ \n\r]+ -> skip;
