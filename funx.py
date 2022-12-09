@@ -5,6 +5,7 @@ from TreeVisitor import TreeVisitor
 from EvalVisitor import EvalVisitor
 
 import sys
+import os
 
 def process_stream(input_stream):
     lexer = FunxLexer(input_stream)
@@ -32,5 +33,20 @@ elif sys.argv.__contains__("--file"):
 else:
     while True:
         input_stream = InputStream(input('fx> '))
-        process_stream(input_stream)
+        if str(input_stream) == ":quit":
+            break
+        elif str(input_stream) == ":clear":
+            if(os.name == "posix"):
+                os.system("clear")
+            else:
+                os.system("cls")
+        elif str(input_stream).startswith(":load"):
+            filename = str(input_stream).split(" ")[1]
+            try:
+                filestream = FileStream(filename) 
+                process_stream(filestream)
+            except:
+                print("ERROR:", filename, "doesn't exist or wasn't found")
+        else:
+            process_stream(input_stream)
         

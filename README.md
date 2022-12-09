@@ -28,6 +28,8 @@ antlr4 -Dlanguage=Python3 -no-listener -visitor Funx.g4
 - [x] Functions
   - [x] Declaration
   - [x] Invocation
+  - [ ] Return
+  - [ ] FIX ERROR: `examples/funx_error.funx`
 - [ ] Comments
 - [ ] CL Interpreter
   - [x] Flags
@@ -44,7 +46,6 @@ antlr4 -Dlanguage=Python3 -no-listener -visitor Funx.g4
     - [ ] Bool operators (and, or, not)
     - [x] FIX ERROR: `True = True` -> `False`
     - [x] FIX ERROR: `1=1 = True` -> `False` && `1=1 = 1=1` correct tree
-  - [ ] Return
   - [ ] Elseif
   - [ ] For Loop
   - [ ] Switch

@@ -72,10 +72,11 @@ class EvalVisitor(FunxVisitor):
     # STATEMENTS
 
     def visitCLI(self, ctx):
-        script = list(ctx.getChildren())[0].getText()
+        l = list(ctx.getChildren())
+        script = l[0].getText()
         if script == ":scope":
             print(symbolTable.symbols)
-        if script == ":fns":
+        elif script == ":fns":
             print(symbolTable.funcs)
 
     def visitAssig(self, ctx):
@@ -144,6 +145,8 @@ class EvalVisitor(FunxVisitor):
         op = ops[l[1].getText()]
         a1 = self.visit(l[0])
         a2 = self.visit(l[2])
+        if l[1].getText() == "/" and a2 == 0:
+            return "ERROR: Division by 0"
         if type(a1) == str:
             return a1
         if type(a2) == str:

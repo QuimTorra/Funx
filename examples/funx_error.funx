@@ -1,0 +1,7 @@
+Mult x y
+{
+   x * y 
+}
+
+Mult 3 3
+Mult 4 5
