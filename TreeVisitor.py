@@ -18,6 +18,14 @@ class TreeVisitor(FunxVisitor):
         self.visit(l[2])
         self.level -= 1
 
+    def visitFunc(self, ctx):
+        l = list(ctx.getChildren())
+        print(" " * self.level + "FUNC(" + l[0].getText() + ")")
+        self.level += 1
+        self.visit(l[1])
+        self.visit(l[3])
+        self.level -= 1
+
     def visitIf(self, ctx):
         l = list(ctx.getChildren())
         print(" " * self.level + "IF(" + l[1].getText() + ")")
@@ -37,8 +45,9 @@ class TreeVisitor(FunxVisitor):
     
     def visitWhile(self, ctx):
         l = list(ctx.getChildren())
-        print(" " * self.level + "WHILE(" + l[1].getText() + ")")
+        print(" " * self.level + "WHILE()")
         self.level += 1
+        self.visit(l[1])
         self.visit(l[3])
         self.level -= 1
 
@@ -84,3 +93,8 @@ class TreeVisitor(FunxVisitor):
         print(" " * self.level +
               FunxParser.symbolicNames[l[0].getSymbol().type] +
               '(' +l[0].getText() + ')')
+
+    def visitArg(self, ctx):
+        l = list(ctx.getChildren())
+        for arg in l:
+            print("-" * self.level + "arg(" + arg.getText() + ")")

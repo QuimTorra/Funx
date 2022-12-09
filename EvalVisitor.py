@@ -25,6 +25,7 @@ ops = {
 class SymbolTable:
     def __init__(self):
         self.symbols = [{}]
+        self.funcs = [{}]
         self.scope = 1
     
     def addScope(self):
@@ -36,16 +37,22 @@ class SymbolTable:
         self.scope-=1
     
     def insert(self, ident, value):
-        for scope in self.symbols:
-            if scope.keys().__contains__(ident):
-                scope[ident] = value
-                return
+        if self.symbols[0].keys().__contains__(ident):
+            self.symbols[0][ident] = value
+            return
         self.symbols[0][ident] = value
     
+    def insertFunx(self, ident, value):
+        if self.funcs[0].keys().__contains__(ident):
+            self.funcs[0][ident] = value
+            return
+        self.funcs[0][ident] = value
+    
     def lookup(self, ident):
-        for scope in self.symbols:
-            if scope.keys().__contains__(ident):
-                return scope[ident]
+        if self.symbols[0].keys().__contains__(ident):
+            return self.symbols[0][ident]
+        if self.funcs[0].keys().__contains__(ident):
+            return self.funcs[0][ident]
         return "ERROR"
 
 symbolTable = SymbolTable()
@@ -64,37 +71,49 @@ class EvalVisitor(FunxVisitor):
 
     # STATEMENTS
 
+    def visitCLI(self, ctx):
+        script = list(ctx.getChildren())[0].getText()
+        if script == ":scope":
+            print(symbolTable.symbols)
+        if script == ":fns":
+            print(symbolTable.funcs)
+
     def visitAssig(self, ctx):
         l = list(ctx.getChildren())
         symbolTable.insert(l[0].getText(), self.visit(l[2]))
     
+    def visitFunc(self, ctx):
+        l = list(ctx.getChildren())
+        ident = l[0].getText()
+        args = self.visit(l[1])
+        code = l[3]
+        symbolTable.insertFunx(ident, (args, code))
+    
     def visitIf(self, ctx):
         l = list(ctx.getChildren())
-        symbolTable.addScope()
         if self.visit(l[1]):
             r = self.visit(l[3])
-            symbolTable.removeScope()
             return r
     
     def visitIfElse(self, ctx):
         l = list(ctx.getChildren())
-        symbolTable.addScope()
         r = "None"
         if self.visit(l[1]):
-            r = self.vist(l[3])
+            r = self.visit(l[3])
         else:
             r = self.visit(l[7])
-        symbolTable.removeScope()
         return r
     
     def visitWhile(self, ctx):
         l = list(ctx.getChildren())
-        symbolTable.addScope()
         r = "" 
-        while self.visit(l[1]):
-            r += self.visit(l[3]) + "\n"
-        symbolTable.removeScope()
-        r = r.removesuffix("\n")
+        cond = self.visit(l[1])
+        if type(cond) == str:
+            return cond
+        while cond:
+            rr = self.visit(l[3])
+            r += rr if str(rr) != "None" else ""
+            cond = self.visit(l[1])
         return r
         
 
@@ -102,10 +121,15 @@ class EvalVisitor(FunxVisitor):
         l = list(ctx.getChildren())
         r0 = str(self.visit(l[0]))
         r1 = str(self.visit(l[1]))
-        if r0 != "None":
-            return r0 + "\n" + r1
-        else:
+        if r0 != "None" and r0 != "":
+            if r1 != "None":
+                return r0 + "\n" + r1
+            else:
+                return ""
+        elif r1 != "None":
             return r1
+        else:
+            return ""
     
     def visitExprs(self, ctx):
         l = list(ctx.getChildren())
@@ -118,23 +142,67 @@ class EvalVisitor(FunxVisitor):
         if l[0].getText() == '(':
             return self.visit(l[1])
         op = ops[l[1].getText()]
-        return op(self.visit(l[0]), self.visit(l[2]))
+        a1 = self.visit(l[0])
+        a2 = self.visit(l[2])
+        if type(a1) == str:
+            return a1
+        if type(a2) == str:
+            return a2
+        return op(a1, a2)
 
     def visitRel(self, ctx):
         l = list(ctx.getChildren())
         if len(l) == 1:
           return l[0].getText()
         op = ops[l[1].getText()]
-        return op(self.visit(l[0]), self.visit(l[2]))
+        a1 = self.visit(l[0])
+        a2 = self.visit(l[2])
+        if type(a1) == str:
+            return a1
+        if type(a2) == str:
+            return a2
+        return op(a1,a2)
 
-    def visitIdent(self, ctx):
+    def visitIdentFN(self, ctx):
         l = list(ctx.getChildren())
         ident = l[0].getText()
-        val = symbolTable.lookup(ident)
-        if val == "ERROR":
+        # FUNCTION
+        sb = symbolTable.lookup(ident)
+        if sb == "ERROR":
+            symbolTable.removeScope()
+            return "ERROR: Function '" + ident + "' was not declarated"
+        args = sb[0]
+        if len(args) != len(l[1:]):
+            symbolTable.removeScope()
+            return "ERROR: Function '" + ident + "' requires " + str(len(args)) + " arguments, but got " + str(len(l[1:]))
+        
+        vals = []
+        for arg in l[1:]:
+            vals.append(self.visit(arg))
+        symbolTable.addScope()
+        for (sym, val) in zip(args, vals):
+            symbolTable.insert(sym, val)
+        r = self.visit(sb[1])
+        symbolTable.removeScope()
+        return r
+
+    def visitIdentVAR(self, ctx):
+        l = list(ctx.getChildren())
+        ident = l[0].getText()
+        # VARIABLE 
+        arg = symbolTable.lookup(ident)
+        if arg == "ERROR":
+            print(ident, symbolTable.symbols)
             return "ERROR: Vairable '" + ident + "' doesn't exist in this scope"
-        return val
+        return arg
 
     def visitVal(self, ctx):
         l = list(ctx.getChildren())
         return int(l[0].getText())
+    
+    def visitArg(self, ctx):
+        l = list(ctx.getChildren())
+        ls = []
+        for c in l:
+            ls.append(c.getText())
+        return ls
