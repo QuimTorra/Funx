@@ -17,7 +17,8 @@ expr:
 	| <assoc = right> expr '^' expr						# Bin
 	| expr ('*' | '/' | '%') expr						# Bin
 	| expr ('+' | '-') expr								# Bin
-	| expr ('=' | '!=' | '<' | '>' | '<=' | '>=') expr	# Rel
+	| expr ('=' | '!=' | '<' | '>' | '<=' | '>=' | 'and', 'or') expr	# Rel
+    | ('not') expr # Rel
 	| TRUE												# Rel
 	| FALSE												# Rel
 	| FN expr*											# IdentFN
@@ -36,4 +37,5 @@ VAR: ([a-z]) ([a-zA-Z] | [0-9] | '_')*;
 // IDENT: ([a-zA-Z] | [0-9] | '_')*;
 CL: (':') ([A-Za-z0-9])*;
 INT: [0-9]+;
+CS: '#' ~[\n]* [\n] -> skip;
 WS: [ \n\r\t]+ -> skip;

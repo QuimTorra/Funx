@@ -17,7 +17,7 @@ def process_stream(input_stream):
         visitor = TreeVisitor()
     visitor.visit(tree)
 
-if sys.argv.__contains__("--help") or sys.argv.__contains__("--h"):
+if sys.argv.__contains__("--help"):
     print("--- FUNX Interpreter ---")
     print("commands:")
     print("\t--file [file].funx: Interpret a file")

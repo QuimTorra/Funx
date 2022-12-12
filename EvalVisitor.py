@@ -19,7 +19,10 @@ ops = {
   '<': lambda x, y: x<y,
   '>': lambda x, y: x>y,
   '<=': lambda x, y: x<=y,
-  '>=': lambda x, y: x>=y
+  '>=': lambda x, y: x>=y,
+  'and': lambda x, y: x and y,
+  'or': lambda x, y: x or y,
+  'not': lambda x: not x
 }
 
 class SymbolTable:
@@ -33,6 +36,7 @@ class SymbolTable:
         self.scope+=1
     
     def removeScope(self):
+        if len(self.symbols) == 1: return
         self.symbols.pop(0)
         self.scope-=1
     
@@ -83,6 +87,7 @@ class EvalVisitor(FunxVisitor):
         l = list(ctx.getChildren())
         symbolTable.insert(l[0].getText(), self.visit(l[2]))
     
+    # Declaration of a function
     def visitFunc(self, ctx):
         l = list(ctx.getChildren())
         ident = l[0].getText()
@@ -120,17 +125,13 @@ class EvalVisitor(FunxVisitor):
 
     def visitRecStmt(self, ctx):
         l = list(ctx.getChildren())
-        r0 = str(self.visit(l[0]))
-        r1 = str(self.visit(l[1]))
-        if r0 != "None" and r0 != "":
-            if r1 != "None":
-                return r0 + "\n" + r1
-            else:
-                return ""
-        elif r1 != "None":
-            return r1
-        else:
-            return ""
+        r0 = self.visit(l[0])
+        if r0 != None:
+          return r0
+        r1 = self.visit(l[1])
+        if r1 != None:
+          return r1
+        
     
     def visitExprs(self, ctx):
         l = list(ctx.getChildren())
@@ -157,6 +158,8 @@ class EvalVisitor(FunxVisitor):
         l = list(ctx.getChildren())
         if len(l) == 1:
           return l[0].getText()
+        if l[0].getText() == 'not':
+            return ops['not'](self.visit(l[1]))
         op = ops[l[1].getText()]
         a1 = self.visit(l[0])
         a2 = self.visit(l[2])
@@ -188,6 +191,7 @@ class EvalVisitor(FunxVisitor):
         r = self.visit(sb[1])
         symbolTable.removeScope()
         return r
+
 
     def visitIdentVAR(self, ctx):
         l = list(ctx.getChildren())

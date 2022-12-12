@@ -1,3 +1,4 @@
+# Funcio que rep dos nombres enters i en torna la seva suma
 Suma x y
 {
   x + y
