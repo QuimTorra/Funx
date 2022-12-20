@@ -3,8 +3,7 @@ grammar Funx;
 root: stmt EOF | EOF;
 
 stmt:
-	CL											# CLI
-	| VAR '<-' expr								# Assig
+	VAR '<-' expr								# Assig
 	| FN args '{' stmt '}'						# Func
 	| IF expr '{' stmt '}'						# If
 	| IF expr '{' stmt '}' ELSE '{' stmt '}'	# IfElse
@@ -15,10 +14,13 @@ stmt:
 expr:
 	'(' expr ')'										# Bin
 	| <assoc = right> expr '^' expr						# Bin
+    | expr '[' expr ']'                                 # ListIndx
+    | expr '[' expr? ':' expr? ']'                      # ListSlice
+    | '[' (expr (',' expr)*)? ']'                       # List
 	| expr ('*' | '/' | '%') expr						# Bin
 	| expr ('+' | '-') expr								# Bin
-	| expr ('=' | '!=' | '<' | '>' | '<=' | '>=' | 'and', 'or') expr	# Rel
-    | ('not') expr # Rel
+	| expr ('=' | '!=' | '<' | '>' | '<=' | '>=' | 'and' | 'or' | 'xor') expr	# Rel
+    | ('not') expr                                      # Rel
 	| TRUE												# Rel
 	| FALSE												# Rel
 	| FN expr*											# IdentFN
@@ -35,7 +37,7 @@ WHILE: 'while';
 FN: ([A-Z]) ([a-zA-Z] | [0-9] | '_')*;
 VAR: ([a-z]) ([a-zA-Z] | [0-9] | '_')*;
 // IDENT: ([a-zA-Z] | [0-9] | '_')*;
-CL: (':') ([A-Za-z0-9])*;
-INT: [0-9]+;
+// CL: (':') ([A-Za-z0-9])*;
+INT: ('-')?[0-9]+;
 CS: '#' ~[\n]* [\n] -> skip;
 WS: [ \n\r\t]+ -> skip;

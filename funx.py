@@ -14,7 +14,7 @@ def process_stream(input_stream):
     tree = parser.root() 
     visitor = EvalVisitor()
     if sys.argv.__contains__("--view-tree"):
-        visitor = TreeVisitor()
+        print(tree.toStringTree(recog=parser)) 
     visitor.visit(tree)
 
 if sys.argv.__contains__("--help"):

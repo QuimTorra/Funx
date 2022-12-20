@@ -42,9 +42,15 @@ antlr4 -Dlanguage=Python3 -no-listener -visitor Funx.g4
 - [ ] Extensions
   - [x] Booleans (`True`, `False`, `=`, `!=`, `>`, `<`, `>=`, `<=`)
     - [x] Types and Operations
-    - [ ] Bool operators (and, or, not)
-    - [x] FIX ERROR: `True = True` -> `False`
-    - [x] FIX ERROR: `1=1 = True` -> `False` && `1=1 = 1=1` correct tree
+    - [x] Bool operators (and, or, not, xor)
+  - [ ] Lists
+    - [x] Basic declaration `[1, 2, 3, 4]`
+    - [x] Variable indexing `a[0]`
+    - [x] Slice `a[1:3]`
+    - [x] Len, Max
+    - [ ] Concatenation
+    - [ ] Map, Filter, Unfold
+  - [ ] I/O
   - [ ] Elseif
   - [ ] For Loop
   - [ ] Switch

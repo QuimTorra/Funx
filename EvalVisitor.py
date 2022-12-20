@@ -22,6 +22,7 @@ ops = {
   '>=': lambda x, y: x>=y,
   'and': lambda x, y: x and y,
   'or': lambda x, y: x or y,
+  'xor': lambda x, y: (not x and y) or (x and not y),
   'not': lambda x: not x
 }
 
@@ -157,7 +158,12 @@ class EvalVisitor(FunxVisitor):
     def visitRel(self, ctx):
         l = list(ctx.getChildren())
         if len(l) == 1:
-          return l[0].getText()
+            b = None
+            if l[0].getText() == "True":
+                b = True
+            elif l[0].getText() == "False":
+                b = False
+            return b
         if l[0].getText() == 'not':
             return ops['not'](self.visit(l[1]))
         op = ops[l[1].getText()]
@@ -192,6 +198,34 @@ class EvalVisitor(FunxVisitor):
         symbolTable.removeScope()
         return r
 
+    def visitList(self, ctx):
+        l = list(ctx.getChildren())
+        ls = []
+        for x in l:
+            if x.getText() == '[' or x.getText() == ']' or x.getText() == ',':
+                continue
+            ls.append(self.visit(x))
+        return ls
+    
+    def visitListSlice(self, ctx):
+        l = list(ctx.getChildren())
+        obj = self.visit(l[0])
+        a, b = None, None
+        if l[2].getText() != ":" and l[2].getText() != "]":
+           a = self.visit(l[2]) 
+        if l[3].getText() != ":" and l[3].getText() != "]":
+           b = self.visit(l[3]) 
+        if l[4].getText() != ":" and l[4].getText() != "]":
+           b = self.visit(l[4]) 
+        return obj[a:b]
+
+    def visitListIndx(self, ctx):
+        l = list(ctx.getChildren())
+        obj = self.visit(l[0])
+        idx = self.visit(l[2])
+        if idx >= len(obj):
+            return "ERROR: List index out of range."
+        return obj[idx]
 
     def visitIdentVAR(self, ctx):
         l = list(ctx.getChildren())
@@ -199,7 +233,6 @@ class EvalVisitor(FunxVisitor):
         # VARIABLE 
         arg = symbolTable.lookup(ident)
         if arg == "ERROR":
-            print(ident, symbolTable.symbols)
             return "ERROR: Vairable '" + ident + "' doesn't exist in this scope"
         return arg
 
