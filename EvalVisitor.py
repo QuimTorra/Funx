@@ -147,6 +147,10 @@ class EvalVisitor(FunxVisitor):
         op = ops[l[1].getText()]
         a1 = self.visit(l[0])
         a2 = self.visit(l[2])
+        if type(a1) == list and type(a2) != list:
+            return a1 + [a2];
+        if type(a1) != list and type(a2) == list:
+            return [a1] + a2
         if l[1].getText() == "/" and a2 == 0:
             return "ERROR: Division by 0"
         if type(a1) == str:

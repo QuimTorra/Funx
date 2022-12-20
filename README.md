@@ -48,8 +48,8 @@ antlr4 -Dlanguage=Python3 -no-listener -visitor Funx.g4
     - [x] Variable indexing `a[0]`
     - [x] Slice `a[1:3]`
     - [x] Len, Max
-    - [ ] Concatenation
-    - [ ] Map, Filter, Unfold
+    - [x] Concatenation (list+list | list+int | int+list)
+    - [ ] Map, Filter, Unfold (High order functions :|)
   - [ ] I/O
   - [ ] Elseif
   - [ ] For Loop
