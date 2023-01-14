@@ -1,0 +1,76 @@
+# This is the standard functions library for the Funx programming language
+# It provides various basic operations for working with numbers and lists
+
+# =================================
+## STD :: List
+# Lists are represented as shows : [ ... ] 
+# We can iterate through a list using a loop, and referencing each index using the syntax a[index]
+# We can also iterate it using a for loop as shows: for x in list {...}
+# The last way to iterate lists is through recursive calls
+
+# Returns the length of the list passed as argument
+Len l 
+{
+    if l = [] { 0 }
+    1 + (Len l[1:])
+}
+
+# Returns the highest value contained in the list passed as argument
+Max l 
+{
+    if (Len l) = 0 { 0 }
+    if (Len l) = 1 { l[0] }
+    if (l[0] > (Max l[1:])) { l[0] }
+    else { Max l[1:] }
+}
+
+# Returns the lowest value contained in the list passed as argument
+Min l 
+{
+    if (Len l) = 0 { 0 }
+    if (Len l) = 1 { l[0] }
+    if (l[0] < (Min l[1:])) { l[0] }
+    else { Min l[1:] }
+}
+
+# Returns the list passed as argument in reverse order
+Reverse l
+{
+    res <- []
+    for x in l 
+    {
+        res <- x + res
+    }
+    res
+}
+
+# Returns the sum of the elements in the list passed as argument
+Sum l 
+{
+    sum <- 0
+    for i in l
+    {
+        sum <- sum + i
+    }
+    sum
+}
+
+# Returns the average of the list passed as argument
+Average l
+{
+    Sum l / Len l
+}
+
+# =================================
+## STD :: Math
+
+Abs x 
+{
+    if x >= 0
+    {
+        x
+    }
+    else {
+        0-x
+    }
+}

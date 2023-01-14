@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap");
+
+body {
+  margin: 0;
+  box-sizing: border-box;
+  display: flex;
+  color: white;
+  height: 100vh;
+  font-family: "Manrope", sans-serif;
+}
+
+#console {
+  padding: 1rem;
+  flex: 4;
+  display: flex;
+  flex-direction: column-reverse;
+  background-color: #111;
+}
+
+#fx-list {
+  padding: 1rem;
+  flex: 1;
+  background-color: #111;
+  border-right: 2px solid #666;
+}
+
+#input {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  gap: 3rem;
+}
+
+#cmd-inp {
+  outline: none;
+  font: inherit;
+  color: inherit;
+  width: 85%;
+  background-color: black;
+  border: 5px solid #666;
+  border-radius: 8px;
+
+  transition: 250ms ease-in-out;
+}
+#cmd-inp:hover,
+#cmd-inp:focus-visible {
+  border-color: rgb(89, 240, 232);
+}
+
+#in-btn {
+  outline: none;
+  border: none;
+  background-color: rgb(89, 240, 232);
+  border-radius: 8px;
+  height: 100%;
+  width: 6.25rem;
+  cursor: pointer;
+
+  transition: 250ms ease-in-out;
+}
+#in-btn:hover,
+#in-btn:focus-visible {
+  background-color: rgb(56, 165, 160);
+}
+
+#info {
+  border-bottom: 2px solid #666;
+}
+
+.oin {
+  margin-top: 0.5rem;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+#github {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border: 1px solid #666;
+  border-radius: 5px;
+  margin: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}

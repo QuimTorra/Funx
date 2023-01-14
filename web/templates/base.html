@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>My Webpage</title>
+    <link rel="stylesheet" href="static/style.css" />
+  </head>
+  <body>
+    <div id="fx-list">
+      <div id="info">
+        <h1>Funx</h1>
+        <p>
+          Funx is a Functional Programming Language implemented in ANTLR4 and
+          Python.
+        </p>
+        <p></p>
+        <p>
+          It provides <span class="bold">Integers</span>,
+          <span class="bold">Booleans</span> and <span class="bold">Lists</span>
+        </p>
+        <p>
+          The language also has it's Standard Library, which includes some basic
+          functions to work with lists. Like <span class="bold">Len</span> for
+          length, <span class="bold">Max/Min</span>, etc.
+        </p>
+      </div>
+      <h3>Functions</h3>
+      <ul id="list">
+        {% for fx in functions %}
+        <li>{{fx}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div id="console">
+      <div id="input">
+        <textarea
+          name="cmd-inp"
+          id="cmd-inp"
+          cols="45"
+          rows="6"
+          placeholder="Enter your function here..."
+        ></textarea>
+        <button id="in-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-caret-right-fill"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"
+            />
+          </svg>
+        </button>
+      </div>
+      <div id="outputs">
+        {% for item in output %}
+        <div class="oin">$ {{item[0]}}</div>
+        <div class="oout">{{item[1]}}</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div id="github">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-github"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+        />
+      </svg>
+    </div>
+
+    <script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelector("#in-btn").onclick = () => {
+          const request = new XMLHttpRequest();
+          const textarea = document.querySelector("#cmd-inp");
+          let text = textarea.value;
+          if (text == "") return;
+          request.open("POST", `/input`);
+          request.setRequestHeader("Content-Type", "application/json");
+          request.onload = () => {
+            const response = JSON.parse(request.responseText);
+            const outs = document.querySelector("#outputs");
+            outs.innerHTML = "";
+            textarea.value = "";
+            response.forEach((item) => {
+              let i = document.createElement("div");
+              let o = document.createElement("div");
+              i.classList.add("oin");
+              o.classList.add("oout");
+              i.textContent = "$ " + item[0];
+              o.textContent = item[1];
+              outs.appendChild(i);
+              outs.appendChild(o);
+            });
+            const rr = new XMLHttpRequest();
+            rr.open("GET", "/fxs");
+            rr.onload = () => {
+              const rs = JSON.parse(rr.responseText);
+              console.log(rs);
+              const list = document.querySelector("#list");
+              list.innerHTML = "";
+              rs.forEach((fn) => {
+                let item = document.createElement("li");
+                item.textContent = fn;
+                list.appendChild(item);
+              });
+            };
+            rr.send();
+          };
+          let data = {
+            input: text,
+          };
+          request.send(JSON.stringify(data));
+        };
+      });
+
+      const gh = document.querySelector("#github");
+      gh.addEventListener("click", () => {
+        window.open("https://github.com/QuimTorra/Funx", "_blank").focus();
+      });
+    </script>
+  </body>
+</html>
