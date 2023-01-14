@@ -50,7 +50,15 @@ antlr4 -Dlanguage=Python3 -no-listener -visitor Funx.g4
     - [x] Len, Max
     - [x] Concatenation (list+list | list+int | int+list)
     - [ ] Map, Filter, Unfold (High order functions :|)
-  - [ ] I/O
-  - [ ] Elseif
-  - [ ] For Loop
-  - [ ] Switch
+  - [x] I/O
+    - [x] print
+    - [x] input
+  - [x] For Loop
+    - [x] for var in list
+    - [x] range list ([x..y])
+  - [ ] High Order Functions ????
+    - [ ] Accept functions as arguments
+    - [ ] Use the function passed as argument
+  - [ ] Flask Website
+  - [ ] STD lib
+  - [ ] Syntax Highlighting vscode / website

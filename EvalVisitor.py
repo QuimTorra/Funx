@@ -122,7 +122,27 @@ class EvalVisitor(FunxVisitor):
             r += rr if str(rr) != "None" else ""
             cond = self.visit(l[1])
         return r
+    
+    def visitFor(self, ctx):
+        l = list(ctx.getChildren())
+        var = l[1].getText()
+        ls = self.visit(l[3])
+        if type(ls) != list:
+            return "ERROR: Type " + str(type(ls)) + " is not iterable. Use a list instead."
+        symbolTable.insert(var, 0)
+        for v in ls:
+            symbolTable.insert(var, v)
+            self.visit(l[5])
+        symbolTable.symbols[0].pop(var)
         
+    def visitOutput(self, ctx):
+        l = list(ctx.getChildren())
+        print(self.visit(l[1]))
+    
+    def visitInput(self, ctx):
+        l = list(ctx.getChildren())
+        symbolTable.insert(l[1].getText(), input())
+
 
     def visitRecStmt(self, ctx):
         l = list(ctx.getChildren())
@@ -179,6 +199,53 @@ class EvalVisitor(FunxVisitor):
             return a2
         return op(a1,a2)
 
+    def visitList(self, ctx):
+        l = list(ctx.getChildren())
+        ls = []
+        for x in l:
+            if x.getText() == '[' or x.getText() == ']' or x.getText() == ',':
+                continue
+            ls.append(self.visit(x))
+        return ls
+
+
+    def visitListRange(self, ctx):
+        l = list(ctx.getChildren())
+        ls = []
+        arg1, arg2 = 0, 0
+        if l[1].getText() == "..":
+            arg2 = self.visit(l[2])
+        else:
+            arg1 = self.visit(l[1])
+            arg2 = self.visit(l[3])
+        for i in range(arg1, arg2):
+            ls.append(i)
+        return ls
+    
+    def visitListSlice(self, ctx):
+        l = list(ctx.getChildren())
+        obj = self.visit(l[0])
+        a, b = None, None
+        if l[2].getText() != ":" and l[2].getText() != "]":
+           a = self.visit(l[2]) 
+        if l[3].getText() != ":" and l[3].getText() != "]":
+           b = self.visit(l[3]) 
+        if l[4].getText() != ":" and l[4].getText() != "]":
+           b = self.visit(l[4]) 
+        return obj[a:b]
+
+    def visitListIndx(self, ctx):
+        l = list(ctx.getChildren())
+        obj = self.visit(l[0])
+        idx = self.visit(l[2])
+        if idx >= len(obj):
+            return "ERROR: List index out of range."
+        return obj[idx]
+
+    def visitIdent(self, ctx):
+        l = list(ctx.getChildren())
+        ident = l[0].getText()
+
     def visitIdentFN(self, ctx):
         l = list(ctx.getChildren())
         ident = l[0].getText()
@@ -201,35 +268,6 @@ class EvalVisitor(FunxVisitor):
         r = self.visit(sb[1])
         symbolTable.removeScope()
         return r
-
-    def visitList(self, ctx):
-        l = list(ctx.getChildren())
-        ls = []
-        for x in l:
-            if x.getText() == '[' or x.getText() == ']' or x.getText() == ',':
-                continue
-            ls.append(self.visit(x))
-        return ls
-    
-    def visitListSlice(self, ctx):
-        l = list(ctx.getChildren())
-        obj = self.visit(l[0])
-        a, b = None, None
-        if l[2].getText() != ":" and l[2].getText() != "]":
-           a = self.visit(l[2]) 
-        if l[3].getText() != ":" and l[3].getText() != "]":
-           b = self.visit(l[3]) 
-        if l[4].getText() != ":" and l[4].getText() != "]":
-           b = self.visit(l[4]) 
-        return obj[a:b]
-
-    def visitListIndx(self, ctx):
-        l = list(ctx.getChildren())
-        obj = self.visit(l[0])
-        idx = self.visit(l[2])
-        if idx >= len(obj):
-            return "ERROR: List index out of range."
-        return obj[idx]
 
     def visitIdentVAR(self, ctx):
         l = list(ctx.getChildren())

@@ -7,6 +7,8 @@ from EvalVisitor import EvalVisitor
 import sys
 import os
 
+loaded = []
+
 def process_stream(input_stream):
     lexer = FunxLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
@@ -45,8 +47,16 @@ else:
             try:
                 filestream = FileStream(filename) 
                 process_stream(filestream)
+                loaded.append(filename)
             except:
                 print("ERROR:", filename, "doesn't exist or wasn't found")
+        elif str(input_stream) == ":reload":
+            for file in loaded:
+                try:
+                    filestream = FileStream(file) 
+                    process_stream(filestream)
+                except:
+                    print("ERROR:", file, "doesn't exist or wasn't found")
         else:
             process_stream(input_stream)
         

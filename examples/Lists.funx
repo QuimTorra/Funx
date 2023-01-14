@@ -11,3 +11,13 @@ Max l
     if (l[0] > (Max l[1:])) {l[0] }
     else { Max l[1:] }
 }
+
+Reverse l
+{
+    res <- []
+    for x in l 
+    {
+        res <- x + res
+    }
+    res
+}
