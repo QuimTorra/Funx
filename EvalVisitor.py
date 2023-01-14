@@ -26,6 +26,15 @@ ops = {
   'not': lambda x: not x
 }
 
+def get_funcs():
+    fxs = []
+    for fn in symbolTable.funcs[0]:
+        f = fn
+        for arg in symbolTable.funcs[0][fn][0]:
+            f += " " + arg
+        fxs.append(f)
+    return fxs
+
 class SymbolTable:
     def __init__(self):
         self.symbols = [{}]

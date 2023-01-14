@@ -1,7 +1,7 @@
 from antlr4 import *
-from funx.FunxLexer import FunxLexer
-from funx.FunxParser import FunxParser
-from funx.EvalVisitor import EvalVisitor, get_funcs
+from FunxLexer import FunxLexer
+from FunxParser import FunxParser
+from EvalVisitor import EvalVisitor, get_funcs
 from flask import Flask, render_template, jsonify, request, url_for
 
 app = Flask(__name__)
@@ -17,7 +17,7 @@ def process_stream(input_stream):
     visitor = EvalVisitor()
     return visitor.visit(tree)
 
-process_stream(FileStream("./funx/std.funx"))
+process_stream(FileStream("std.funx"))
 fxs = get_funcs()
 
 @app.route("/")
