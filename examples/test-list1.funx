@@ -1,0 +1,8 @@
+Len l 
+{
+    if l = [] { 0 }
+    1 + (Len l[1:])
+}
+
+Len [1, 2, 3, 4]
+# Expected : 4

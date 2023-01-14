@@ -1,0 +1,12 @@
+Reverse l
+{
+    res <- []
+    for x in l 
+    {
+        res <- x + res
+    }
+    res
+}
+
+Reverse [1..10]
+# Expected : [9, 8, 7, 6, 5, 4, 3, 2, 1]

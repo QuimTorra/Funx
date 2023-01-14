@@ -150,7 +150,10 @@ class EvalVisitor(FunxVisitor):
     
     def visitInput(self, ctx):
         l = list(ctx.getChildren())
-        symbolTable.insert(l[1].getText(), input())
+        v = input()
+        if not v.isnumeric():
+            return "ERROR! Input should always be a number"
+        symbolTable.insert(l[1].getText(), int(v))
 
 
     def visitRecStmt(self, ctx):

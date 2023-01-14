@@ -1,6 +1,0 @@
-Mult x y
-{
-   x * y 
-}
-
-Mult 3 3

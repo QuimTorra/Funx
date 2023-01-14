@@ -1,0 +1,11 @@
+# Funcio que imprimeix X i llavors retorna x+1
+F x {
+    print x
+    x + 1
+}
+
+F 3
+
+# Expected : 
+# 3
+# 4

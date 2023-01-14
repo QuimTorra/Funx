@@ -177,7 +177,7 @@ Suma x y {
 }
 ```
 
-## Input/Output
+### Input/Output
 
 We have some i/o ops that are rarely used.
 
