@@ -20,10 +20,10 @@ antlr4 -Dlanguage=Python3 -no-listener -visitor Funx.g4
 
 Currently there's 2 options to use Funx in your machine:
 
+- Web Page
+  > Run `flask --app funx.py run` to start the server. Using your favorite browser, go to `127.0.0.1:5000` and start using Funx.
 - CLI Interpreter
   > Run `python funx_cli.py` to start the Funx interpreter on your machine.
-- Web Page
-  > Run `flask --app funx_web.py run` to start the server. Using your favorite browser, go to `127.0.0.1:5000` and start using Funx.
 
 Funx is designed to work always in the same way:
 

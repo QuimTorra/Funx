@@ -30,7 +30,7 @@ elif sys.argv.__contains__("--file"):
         print("Error: file needs to be of type *.funx")
     else:
         input_stream = FileStream(filename)
-        process_stream(input_stream)
+        print(process_stream(input_stream))
 else:
     while True:
         input_stream = InputStream(input('fx> '))
@@ -45,7 +45,7 @@ else:
             filename = str(input_stream).split(" ")[1]
             try:
                 filestream = FileStream(filename) 
-                process_stream(filestream)
+                print(process_stream(filestream))
                 loaded.append(filename)
             except:
                 print("ERROR:", filename, "doesn't exist or wasn't found")
@@ -57,5 +57,5 @@ else:
                 except:
                     print("ERROR:", file, "doesn't exist or wasn't found")
         else:
-            process_stream(input_stream)
+            print(process_stream(input_stream))
         

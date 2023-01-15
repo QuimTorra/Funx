@@ -81,7 +81,7 @@ class EvalVisitor(FunxVisitor):
             return
         r = self.visit(l[0])
         if str(r) != "None":
-            print(r)
+            return r
 
     # STATEMENTS
 
